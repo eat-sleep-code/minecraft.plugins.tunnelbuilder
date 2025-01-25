@@ -131,7 +131,7 @@ public class TunnelBuilder extends PluginBase {
 					level.loadChunk(x >> 4, z >> 4, true);
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 4; y++) {
+					for (int y = startY; y <= startY + 5; y++) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -139,7 +139,7 @@ public class TunnelBuilder extends PluginBase {
 							// Call flood prevention for the current position
 							preventFlooding(level, wallX, y, wallZ);
 
-							if (y == startY || y == startY + 4) {
+							if (y == startY || y == startY + 4 || y == startY + 5) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
 							} else if (offset == -4 || offset == 4) {
@@ -185,7 +185,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 4; y++) {
+					for (int y = startY; y <= startY + 5; y++) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -193,7 +193,7 @@ public class TunnelBuilder extends PluginBase {
 							// Call flood prevention for the current position
 							preventFlooding(level, wallX, y, wallZ);
 
-							if (y == startY || y == startY + 4) {
+							if (y == startY || y == startY + 4 || y == startY + 5) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
 							} else if (offset == -4 || offset == 4) {
@@ -214,6 +214,7 @@ public class TunnelBuilder extends PluginBase {
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(198)); // FOR SOME REASON API IS MISSING DIRT_PATH ENTITY NAME SO NEED TO USE ID INSTEAD
 							}
 
+							// Farmland
 							if (y == startY && (offset == -1 || offset == 1 || offset == -3 || offset == 3)) {
 								Vector3 farmlandPosition = new Vector3(wallX, y, wallZ);
 								
@@ -258,7 +259,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 4; y++) {
+					for (int y = startY; y <= startY + 5; y++) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -283,7 +284,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 4; y++) {
+					for (int y = startY; y <= startY + 5; y++) {
 						for (int offset = -2; offset <= 2; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -291,7 +292,7 @@ public class TunnelBuilder extends PluginBase {
 							// Call flood prevention for the current position
 							preventFlooding(level, wallX, y, wallZ);
 
-							if (y == startY || y == startY + 4) {
+							if (y == startY || y == startY + 4 || y == startY + 5) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
 							} else if (offset == -2 || offset == 2) {
