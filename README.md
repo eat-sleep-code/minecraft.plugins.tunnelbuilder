@@ -1,4 +1,4 @@
-#TunnelBuilder
+# TunnelBuilder Minecraft (Nukkit) Plugin
 
 Build a lighted tunnel with configurable length and direction.  Choose from a standard stone tunnel, a parallel powered rail tunnel, or a farm tunnel.
 
