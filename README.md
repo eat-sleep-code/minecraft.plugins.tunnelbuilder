@@ -14,11 +14,11 @@ Build a lighted tunnel with configurable length and direction.  Choose from a st
 
   `/tunnel 20`
 
-- Create a lighted farm tunnel (with two canals and four rows of crops) that is 10 blocks long:
+- Create a 3x7 lighted farm tunnel (with two canals and four rows of crops) that is 10 blocks long:
 
   `/tunnel 10 farm`
 
-- Create a lighted rail tunnel (with two rails) that is 100 blocks long:
+- Create a 3 x 7 lighted rail tunnel (with two rails) that is 100 blocks long:
 
   `/tunnel 100 rail`
 
