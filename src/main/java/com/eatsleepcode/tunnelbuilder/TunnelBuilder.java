@@ -136,6 +136,9 @@ public class TunnelBuilder extends PluginBase {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
 
+							// Call flood prevention for the current position
+							preventFlooding(level, wallX, y, wallZ);
+
 							if (y == startY || y == startY + 4) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
@@ -187,6 +190,9 @@ public class TunnelBuilder extends PluginBase {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
 
+							// Call flood prevention for the current position
+							preventFlooding(level, wallX, y, wallZ);
+
 							if (y == startY || y == startY + 4) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
@@ -208,9 +214,13 @@ public class TunnelBuilder extends PluginBase {
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(198)); // FOR SOME REASON API IS MISSING DIRT_PATH ENTITY NAME SO NEED TO USE ID INSTEAD
 							}
 
-							// Farmland
 							if (y == startY && (offset == -1 || offset == 1 || offset == -3 || offset == 3)) {
-								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.FARMLAND));
+								Vector3 farmlandPosition = new Vector3(wallX, y, wallZ);
+								
+								Block farmland = Block.get(Block.FARMLAND);
+								farmland.setDamage(7); // Set moisture level to fully hydrated (7)
+							
+								level.setBlock(farmlandPosition, farmland);
 							}
 
 							// Crops
@@ -278,6 +288,9 @@ public class TunnelBuilder extends PluginBase {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
 
+							// Call flood prevention for the current position
+							preventFlooding(level, wallX, y, wallZ);
+
 							if (y == startY || y == startY + 4) {
 								// Floor and ceiling
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.STONE));
@@ -319,6 +332,22 @@ public class TunnelBuilder extends PluginBase {
 			return "east";
 		}
 	}
+
+	private void preventFlooding(Level level, int x, int y, int z) {
+		Vector3 position = new Vector3(x, y, z);
+		Block block = level.getBlock(position);
+	
+		// Replace water with air
+		if (block.getId() == Block.WATER || block.getId() == Block.STILL_WATER) {
+			level.setBlock(position, Block.get(Block.AIR));
+		}
+	
+		// Handle sand or gravel
+		if (block.getId() == Block.SAND || block.getId() == Block.GRAVEL) {
+			level.setBlock(position, Block.get(Block.STONE)); // Replace with solid block
+		}
+	}
+	
 
 	public void createChest(Level level, Vector3 position, String contents) {
 		// Create and place the chest block
