@@ -49,26 +49,27 @@ public class TunnelBuilder extends PluginBase {
 					if (args.length >= 1) {
 						length = Integer.parseInt(args[0]);
 					} else {
-						sender.sendMessage(TextFormat.RED + "Usage: /tunnel <length> [type] [x] [y] [z] [direction]");
+						sender.sendMessage(TextFormat.RED + "Usage: /tunnel <length> [type] [direction] [x] [y] [z]");
 						return false;
 					}
 					if (args.length >= 2) {
 						tunnelType = args[1].toLowerCase();
 					}
-					if (args.length >= 5) {
-						startX = Integer.parseInt(args[2]);
-						startY = Integer.parseInt(args[3]);
-						startZ = Integer.parseInt(args[4]);
+					if (args.length >= 3) {
+						direction = args[2].toLowerCase();
 					}
-					if (args.length == 6) {
-						direction = args[5].toLowerCase();
+					if (args.length >= 6) {
+						startX = Integer.parseInt(args[3]);
+						startY = Integer.parseInt(args[4]);
+						startZ = Integer.parseInt(args[5]);
 					}
+					
 	
 					Level level = player.getLevel();
 	
 					// Wrap buildTunnel with its own try-catch for extra safety
 					try {
-						buildTunnel(level, tunnelType, startX, startY, startZ, length, direction, sender);
+						buildTunnel(level, length, tunnelType, direction, startX, startY, startZ, sender);
 					} catch (Exception e) {
 						sender.sendMessage(TextFormat.RED + "An error occurred while building the tunnel.");
 						getLogger().error("Error during tunnel construction", e);
@@ -92,8 +93,7 @@ public class TunnelBuilder extends PluginBase {
 	}
 	
 
-	private void buildTunnel(Level level, String tunnelType, int startX, int startY, int startZ, int length,
-			String direction, CommandSender sender) {
+	private void buildTunnel(Level level, int length, String tunnelType, String direction, int startX, int startY, int startZ, CommandSender sender) {
 		int dx = 0, dz = 0;
 		boolean isNorthSouth = false;
 
