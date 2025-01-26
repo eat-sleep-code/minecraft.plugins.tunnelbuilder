@@ -14,7 +14,7 @@ Build a lighted tunnel with configurable length and direction.  Choose from a st
 
   `/tunnel 20`
 
-- Create a 3x7 lighted farm tunnel – with two canals, four rows of crops, and periodically placed chests – that is 10 blocks long:
+- Create a 3 x 7 lighted farm tunnel – with two canals, four rows of crops, and periodically placed chests – that is 10 blocks long:
 
   `/tunnel 10 farm`
 
