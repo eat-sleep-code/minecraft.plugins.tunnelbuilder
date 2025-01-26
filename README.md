@@ -25,5 +25,8 @@ Build a lighted tunnel with configurable length and direction.  Choose from a st
 - By default, the tunnels will be built starting from your character's position, in the direction the character is facing.   You may override this by specifying the direction (north, south, east, or west) and/or X and Y coordinates:
 
   `/tunnel <length> [type] [direction] [x] [y] [z]`
-  
+
+## Known Issues
+
+- When gravel, sand, or water is directly above the tunneling area it can sometimes overwhelm the creation of the tunnel.   This will result in some debris that needs to be cleaned up.  
 
