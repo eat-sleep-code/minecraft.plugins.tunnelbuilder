@@ -131,7 +131,7 @@ public class TunnelBuilder extends PluginBase {
 					level.loadChunk(x >> 4, z >> 4, true);
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 5; y++) {
+					for (int y = startY + 5; y >= startY; y--) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -159,6 +159,22 @@ public class TunnelBuilder extends PluginBase {
 							if (y == startY && (offset == -2 || offset == 2) && i % 5 == 0) {
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.REDSTONE_BLOCK));
 							}
+						}
+					}
+				}
+
+				// Rails (must be placed after tunnel is built)
+				for (int i = 0; i < length; i++) {
+					int x = startX + i * dx;
+					int z = startZ + i * dz;
+					if (!level.isChunkLoaded(x >> 4, z >> 4)) {
+						level.loadChunk(x >> 4, z >> 4, true);
+					}
+
+					for (int y = startY + 5; y >= startY; y--) {
+						for (int offset = -4; offset <= 4; offset++) {
+							int wallX = isNorthSouth ? x + offset : x;
+							int wallZ = isNorthSouth ? z : z + offset;
 
 							// Place powered rail on top of redstone blocks
 							if (y == startY + 1 && (offset == -2 || offset == 2)) {
@@ -170,6 +186,7 @@ public class TunnelBuilder extends PluginBase {
 						}
 					}
 				}
+
 				sender.sendMessage(TextFormat.GREEN + "Rail tunnel built successfully!");
 				// ============================================================
 
@@ -185,7 +202,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 5; y++) {
+					for (int y = startY + 5; y >= startY; y--) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -218,13 +235,36 @@ public class TunnelBuilder extends PluginBase {
 							if (y == startY && (offset == -1 || offset == 1 || offset == -3 || offset == 3)) {
 								Vector3 farmlandPosition = new Vector3(wallX, y, wallZ);
 								
+								// Create a farmland block and set its moisture level to fully hydrated (7)
 								Block farmland = Block.get(Block.FARMLAND);
-								farmland.setDamage(7); // Set moisture level to fully hydrated (7)
-							
-								level.setBlock(farmlandPosition, farmland);
+								farmland.setDamage(7); 
+								
+								// Place the block in the level with updates for lighting and physics
+								level.setBlock(farmlandPosition, farmland, true, true);
 							}
 
-							// Crops
+							// Water
+							if (y == startY && (offset == -2 || offset == 2)) {
+								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.WATER));
+							}
+						}
+					}
+				}
+
+				// Crops (must be planted after farmland exists)
+				for (int i = 0; i < length; i++) {
+					int x = startX + i * dx;
+					int z = startZ + i * dz;
+					if (!level.isChunkLoaded(x >> 4, z >> 4)) {
+						level.loadChunk(x >> 4, z >> 4, true);
+					}
+
+					for (int y = startY + 5; y >= startY; y--) {
+						for (int offset = -4; offset <= 4; offset++) {
+							int wallX = isNorthSouth ? x + offset : x;
+							int wallZ = isNorthSouth ? z : z + offset;
+
+							// Chests
 							if (y == startY + 1 && offset == -1 && i % 40 == 0) {
 								createChest(level, new Vector3(wallX, y, wallZ), "melons");
 							} else if (y == startY + 1 && offset == -1 && i % 30 == 0) {
@@ -236,14 +276,10 @@ public class TunnelBuilder extends PluginBase {
 							} else if (y == startY + 1 && (offset == -1 || offset == 1 || offset == -3 || offset == 3)) {
 								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.POTATO_BLOCK));
 							}
-
-							// Water
-							if (y == startY && (offset == -2 || offset == 2)) {
-								level.setBlock(new Vector3(wallX, y, wallZ), Block.get(Block.WATER));
-							}
 						}
 					}
 				}
+				
 				sender.sendMessage(TextFormat.GREEN + "Farm tunnel built successfully!");
 				// ============================================================
 
@@ -259,7 +295,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 5; y++) {
+					for (int y = startY + 5; y >= startY; y--) {
 						for (int offset = -4; offset <= 4; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -284,7 +320,7 @@ public class TunnelBuilder extends PluginBase {
 					}
 
 					// Iterate through the height of the tunnel
-					for (int y = startY; y <= startY + 5; y++) {
+					for (int y = startY + 5; y >= startY; y--) {
 						for (int offset = -2; offset <= 2; offset++) {
 							int wallX = isNorthSouth ? x + offset : x;
 							int wallZ = isNorthSouth ? z : z + offset;
@@ -335,17 +371,9 @@ public class TunnelBuilder extends PluginBase {
 	}
 
 	private void preventFlooding(Level level, int x, int y, int z) {
-		Vector3 position = new Vector3(x, y, z);
-		Block block = level.getBlock(position);
-	
-		// Replace water with air
-		if (block.getId() == Block.WATER || block.getId() == Block.STILL_WATER) {
-			level.setBlock(position, Block.get(Block.AIR));
-		}
-	
-		// Handle sand or gravel
-		if (block.getId() == Block.SAND || block.getId() == Block.GRAVEL) {
-			level.setBlock(position, Block.get(Block.STONE)); // Replace with solid block
+		Block block = level.getBlock(new Vector3(x, y, z));
+		if (block.getId() == Block.WATER || block.getId() == Block.LAVA) {
+			level.setBlock(new Vector3(x, y, z), Block.get(Block.AIR));
 		}
 	}
 	
