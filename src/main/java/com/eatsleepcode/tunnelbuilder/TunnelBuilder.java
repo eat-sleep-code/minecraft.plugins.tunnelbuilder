@@ -372,7 +372,7 @@ public class TunnelBuilder extends PluginBase {
 
 	private void preventFlooding(Level level, int x, int y, int z) {
 		Block block = level.getBlock(new Vector3(x, y, z));
-		if (block.getId() == Block.WATER || block.getId() == Block.LAVA) {
+		if (block.getId() == Block.WATER || block.getId() == Block.LAVA || block.getId() == Block.GRAVEL || block.getId() == Block.SAND || block.getId() == Block.CONCRETE_POWDER) {
 			level.setBlock(new Vector3(x, y, z), Block.get(Block.AIR));
 		}
 	}

@@ -1,6 +1,6 @@
 name: TunnelBuilder
 main: com.eatsleepcode.tunnelbuilder.TunnelBuilder
-version: 2025.01.25.18
+version: 2025.01.25.22
 api: [1.0.11]
 author: eat-sleep-code
 description: Build a lighted tunnel with configurable length and direction.  Choose from a standard stone tunnel, a parallel powered rail tunnel, or a farm tunnel.
